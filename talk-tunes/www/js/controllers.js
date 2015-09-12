@@ -1,36 +1,30 @@
 myApp.controller("LoginController", function($scope, $firebaseAuth, $state) {
   var ref = new Firebase("https://talk-tunes.firebaseio.com");
 
-  // Create an instance of the authentication service
-  var auth = $firebaseAuth(ref);
-
-  ref.onAuth(function(authData) {
-    if (authData === null) {
-        console.log("Not logged in yet");
-        $state.go('login');
+  // Create a callback to handle the result of the authentication
+  function authHandler(error, authData) {
+    if (error) {
+      console.log("Login Failed!", error);
     } else {
-        console.log("Logged in as", authData.uid);
-        $state.go('home');
+      console.log("Authenticated successfully with payload:", authData);
+      $state.go('home');
     }
-    $scope.authData = authData; // This will display the user's name in our view
-});
+  }
 
   // Logs a user in
   $scope.login = function(provider){
-
-      if (auth === null) {
-
-        auth.$authWithOAuthPopup(provider).then(function(authData) {
-          //console.log("Logged in as:", authData.uid);
-        }).catch(function(error) {
-          //console.log("Authentication failed:", error);
-      });
-
-      } else {
-          //console.log("Logged in as", authData.uid);
-          $state.go('home');
+      var authData = ref.getAuth();
+      if (authData){
+        $state.go('home');
       }
-  }
+      else{
+        // if user not logged it, force oauth process
+        ref.authWithOAuthPopup(provider, authHandler),{
+          remember: "sessionOnly",
+          scope: "email"
+        };
+      }
+  };
 
   // Logs a user out
   $scope.logout = function() {
