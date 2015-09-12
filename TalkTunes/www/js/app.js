@@ -15,7 +15,7 @@ angular.module('starter', ['ionic', 'firebase'])
   $scope.items = Items;
 
   $scope.addItem = function() {
-    var name = prompt('What do you need to buy?');
+    var name = prompt('What music do you want to add?');
     if (name) {
       $scope.items.$add({
         'name': name
