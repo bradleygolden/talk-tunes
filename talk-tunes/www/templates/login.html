@@ -1,0 +1,16 @@
+<ion-view>
+  <ion-pane style="background-image: url(https://upload.wikimedia.org/wikipedia/commons/4/40/Headphones_1.jpg); background-size: 300%; background-position: center; background-repeat:no-repeat;" >
+    <ion-header-bar class="bar-stable">
+      <h1 class="title">Login</h1>
+    </ion-header-bar>
+    <ion-content ng-controller="LoginController">
+      <!-- Buttons -->
+      <div style="margin:auto; transform: translateY(50%); " class="padding col col-75">
+        <h1 style="color:white; font-family: Sans-serif";>Talk Tunes</h1>
+        <button class="button button-full button-assertive" ng-click="login('google')">Log in with Google</button>
+        <button class="button button-full button-positive" ng-click="login('facebook')">Log in with Facebook</button>
+        <!-- <button class="button button-full button-positive" ng-click="logout()">Log out</button> -->
+      </div>
+    </ion-content>
+  </ion-pane>
+</ion-view>
