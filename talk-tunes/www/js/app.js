@@ -5,8 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 var myApp = angular.module('starter', [
   'ionic',
-  'firebase'
-  ]);
+  'firebase']);
 
 myApp.run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
