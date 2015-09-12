@@ -3,7 +3,9 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-var myApp = angular.module('starter', ['ionic', 'firebase']);
+var myApp = angular.module('starter', [
+  'ionic',
+  'firebase']);
 
 myApp.run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -16,13 +18,27 @@ myApp.run(function($ionicPlatform) {
       StatusBar.styleDefault();
     }
   });
-})
+});
 
-myApp.controller("loginCtrl", function($scope, $firebaseAuth) {
+myApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider){
+  $stateProvider.
+  state('login', {
+    url: '/login',
+    templateUrl: 'templates/login.html',
+    controller: 'LoginController'
+  });
+  $urlRouterProvider.otherwise('/login');
+}]);
+
+myApp.controller("LoginController", function($scope, $firebaseAuth) {
   var ref = new Firebase("https://talk-tunes.firebaseio.com");
 
   // Create an instance of the authentication service
   var auth = $firebaseAuth(ref);
+
+  ref.onAuth(function(user){
+    console.log(user);
+  });
 
   // Logs a user in
   $scope.login = function(provider){
@@ -35,6 +51,7 @@ myApp.controller("loginCtrl", function($scope, $firebaseAuth) {
 
   // Logs a user out
   $scope.logout = function() {
-    auth.$unauth();
+    console.log("logout");
+    ref.unauth();
   };
 });
