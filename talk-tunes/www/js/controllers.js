@@ -1,6 +1,9 @@
 myApp.controller("LoginController", function($scope, $firebaseAuth, $state) {
   var ref = new Firebase("https://talk-tunes.firebaseio.com");
 
+  //ref.child(string /user/id/location)
+  //firebase.com/docs
+
   // Create an instance of the authentication service
   var auth = $firebaseAuth(ref);
 
@@ -44,7 +47,7 @@ myApp.factory('Items', ['$firebaseArray', function($firebaseArray) {
   return $firebaseArray(itemsRef);
 }])
 
-myApp.controller('HomeController', function($scope, $ionicListDelegate, Items, $state) {
+myApp.controller('HomeController', function($scope, $ionicListDelegate, Items, $state, $cordovaGeolocation) {
 
   $scope.items = Items;
 
@@ -69,4 +72,20 @@ myApp.controller('HomeController', function($scope, $ionicListDelegate, Items, $
     ref.unauth();
     $state.go('login');
   };
+
+  var posOptions = {timeout: 10000, enableHighAccuracy: true};
+  callback = function(){$cordovaGeolocation
+    .getCurrentPosition(posOptions)
+    .then(function (position) {
+      var lat  = position.coords.latitude
+      var long = position.coords.longitude
+      // console.log(lat, long);
+      setTimeout(callback, 5000);
+    }, function(err) {
+      console.error("Couldn't not get location data.");
+    });
+  };
+  callback();
+
+
 });
