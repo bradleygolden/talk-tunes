@@ -6,10 +6,10 @@ myApp.controller("LoginController", function($scope, $firebaseAuth, $state) {
 
   ref.onAuth(function(authData) {
     if (authData === null) {
-        //console.log("Not logged in yet");
+        console.log("Not logged in yet");
         $state.go('login');
     } else {
-        //console.log("Logged in as", authData.uid);
+        console.log("Logged in as", authData.uid);
         $state.go('home');
     }
     $scope.authData = authData; // This will display the user's name in our view
