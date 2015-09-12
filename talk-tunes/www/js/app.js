@@ -21,37 +21,16 @@ myApp.run(function($ionicPlatform) {
 });
 
 myApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider){
-  $stateProvider.
-  state('login', {
+  $stateProvider
+  .state('login', {
     url: '/login',
     templateUrl: 'templates/login.html',
     controller: 'LoginController'
+  })
+  .state('home', {
+    url: '/home',
+    templateUrl: 'templates/home.html',
+    controller: 'HomeController'
   });
   $urlRouterProvider.otherwise('/login');
 }]);
-
-myApp.controller("LoginController", function($scope, $firebaseAuth) {
-  var ref = new Firebase("https://talk-tunes.firebaseio.com");
-
-  // Create an instance of the authentication service
-  var auth = $firebaseAuth(ref);
-
-  ref.onAuth(function(user){
-    console.log(user);
-  });
-
-  // Logs a user in
-  $scope.login = function(provider){
-    auth.$authWithOAuthPopup(provider).then(function(authData) {
-      console.log("Logged in as:", authData.uid);
-    }).catch(function(error) {
-      console.log("Authentication failed:", error);
-    });
-  }
-
-  // Logs a user out
-  $scope.logout = function() {
-    console.log("logout");
-    ref.unauth();
-  };
-});
