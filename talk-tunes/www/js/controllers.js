@@ -96,19 +96,18 @@ myApp.controller('HomeController', function($scope, $ionicListDelegate, Items, $
   var ref = new Firebase("https://talk-tunes.firebaseio.com/");
   var authData = ref.getAuth();
   var posOptions = {timeout: 10000, enableHighAccuracy: true};
-   callback = function(){$cordovaGeolocation
+   getPos = function(){$cordovaGeolocation
      .getCurrentPosition(posOptions)
      .then(function (position) {
        var lat  = position.coords.latitude
        var long = position.coords.longitude
        update_lat_long(authData, lat, long);
-       setTimeout(callback, 5000);
+       setInterval(getPos, 5000);
      }, function(err) {
        console.error("Couldn't not get location data.");
+       setInterval(getPos, 5000);
      });
    };
    callback();
 
 });
-
-
