@@ -6,8 +6,8 @@ myApp.controller("LoginController", function($scope, $firebaseAuth, $state) {
     var userRef = new Firebase("https://talk-tunes.firebaseio.com/users/" + authData.uid);
     var geoFire = new GeoFire(userRef);
     userRef.remove();
-    userRef = new Firebase("https://talk-tunes.firebaseio.com/geofire/" + authData.uid);
-    geoFire.remove();
+    userRef = new Firebase("https://talk-tunes.firebaseio.com/geofire/");
+    geoFire.remove(authData.uid);
   }
 
   set_user = function(authData){
@@ -75,6 +75,7 @@ myApp.controller('HomeController', function($scope, $ionicListDelegate, Items, $
 
   // Logs a user out
   $scope.logout = function() {
+    clearInterval(interval);
     var ref = new Firebase("https://talk-tunes.firebaseio.com/");
     var authData = ref.getAuth(); // get auth object
     remove_user(authData); // delete user from database
@@ -126,5 +127,5 @@ myApp.controller('HomeController', function($scope, $ionicListDelegate, Items, $
     });
   };
 
-  setInterval(getPos, 3000); // call for user position and update every 3 seconds
+  var interval = setInterval(getPos, 3000); // call for user position and update every 3 seconds
 });
