@@ -4,12 +4,17 @@ myApp.controller("LoginController", function($scope, $firebaseAuth, $state) {
   remove_user = function(authData){
     //console.log(authData.uid);
     var userRef = new Firebase("https://talk-tunes.firebaseio.com/users/" + authData.uid);
+    var geoFire = new GeoFire(userRef);
     userRef.remove();
+    userRef = new Firebase("https://talk-tunes.firebaseio.com/geofire/" + authData.uid);
+    geoFire.remove();
   }
 
   set_user = function(authData){
-    var userRef = new Firebase("https://talk-tunes.firebaseio.com/users/" + authData.uid);
-    //console.log(authData.uid);
+    // add user to firebase
+    var userRef = new Firebase("https://talk-tunes.firebaseio.com/");
+
+    //add user to firebase
     userRef.set(authData.uid);
   };
 
@@ -75,6 +80,7 @@ myApp.controller('HomeController', function($scope, $ionicListDelegate, Items, $
     remove_user(authData); // delete user from database
     ref.unauth(); // sign out of auth
     $state.go('login');
+    return;
   };
 
   var update_lat_long = function(authData, lat, long){
@@ -84,28 +90,41 @@ myApp.controller('HomeController', function($scope, $ionicListDelegate, Items, $
       latitude: lat,
       longitude: long
     }, function(error) {
-    if (error) {
-      console.error("Data could not be saved." + error);
-    } else {
-      //console.error("Data saved successfully.");
-  }
-});
+      if (error) {
+        console.error("Data could not be saved." + error);
+      } else {
+        //console.error("Data saved successfully.");
+      }
+    });
+
+    // do geoFire
+    userRef = new Firebase("https://talk-tunes.firebaseio.com/geofire/");
+    var geoFire = new GeoFire(userRef);
+    var arr = [lat, long];
+
+    key = (authData.uid).toString();
+
+    geoFire.set(key, arr).then(function() {
+      console.log("Provided keys have been added to GeoFire");
+    }, function(error) {
+      console.log("Error: " + error);
+    });
   };
 
   var ref = new Firebase("https://talk-tunes.firebaseio.com/");
   var authData = ref.getAuth();
   var posOptions = {timeout: 10000, enableHighAccuracy: true};
-  var getPos = function(){$cordovaGeolocation
-     .getCurrentPosition(posOptions)
-     .then(function (position) {
-       var lat  = position.coords.latitude;
-       var long = position.coords.longitude;
-       // console.log(lat,long);
-       update_lat_long(authData, lat, long);
-     }, function(err) {
-       // console.error("Couldn't not get location data.");
-     });
-   };
 
-   setInterval(getPos, 3000); // call for user position and update every 3 seconds
+  var getPos = function(){$cordovaGeolocation
+    .getCurrentPosition(posOptions)
+    .then(function (position) {
+      var lat  = position.coords.latitude;
+      var long = position.coords.longitude;
+      update_lat_long(authData, lat, long);
+    }, function(err) {
+      // console.error("Couldn't not get location data.");
+    });
+  };
+
+  setInterval(getPos, 3000); // call for user position and update every 3 seconds
 });
