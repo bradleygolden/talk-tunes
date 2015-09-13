@@ -92,22 +92,20 @@ myApp.controller('HomeController', function($scope, $ionicListDelegate, Items, $
 });
   };
 
-
   var ref = new Firebase("https://talk-tunes.firebaseio.com/");
   var authData = ref.getAuth();
   var posOptions = {timeout: 10000, enableHighAccuracy: true};
-   var getPos = function(){$cordovaGeolocation
+  var getPos = function(){$cordovaGeolocation
      .getCurrentPosition(posOptions)
      .then(function (position) {
-       var lat  = position.coords.latitude
-       var long = position.coords.longitude
+       var lat  = position.coords.latitude;
+       var long = position.coords.longitude;
+       // console.log(lat,long);
        update_lat_long(authData, lat, long);
-       setInterval(getPos, 5000);
      }, function(err) {
-       console.error("Couldn't not get location data.");
-       setInterval(getPos, 5000);
+       // console.error("Couldn't not get location data.");
      });
    };
-   getPos();
 
+   setInterval(getPos, 3000); // call for user position and update every 3 seconds
 });
