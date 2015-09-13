@@ -3,7 +3,6 @@
       <h1 class="title">Music</h1>
       <button class="button button-icon ion-plus" ng-click="addItem()"></button>
     </ion-header-bar>
-
     <ion-content>
       <ion-list>
         <ion-item ng-repeat="item in items" ng-class="{purchased: item.status == 'purchased'}">
@@ -14,8 +13,7 @@
         </ion-item>
       </ion-list>
     </ion-content>
-
-    <div class="bar bar-footer">
-      <button class="button button-clear pull-right" ng-click="logout()">Logout</button>
-    </div>
+  <div class="bar bar-footer">
+    <button class="button button-clear pull-right" ng-click="logout()">Logout</button>
   </div>
+</div>
