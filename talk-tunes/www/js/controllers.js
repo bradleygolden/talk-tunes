@@ -96,7 +96,7 @@ myApp.controller('HomeController', function($scope, $ionicListDelegate, Items, $
   var ref = new Firebase("https://talk-tunes.firebaseio.com/");
   var authData = ref.getAuth();
   var posOptions = {timeout: 10000, enableHighAccuracy: true};
-   getPos = function(){$cordovaGeolocation
+   var getPos = function(){$cordovaGeolocation
      .getCurrentPosition(posOptions)
      .then(function (position) {
        var lat  = position.coords.latitude
@@ -108,6 +108,6 @@ myApp.controller('HomeController', function($scope, $ionicListDelegate, Items, $
        setInterval(getPos, 5000);
      });
    };
-   callback();
+   getPos();
 
 });
